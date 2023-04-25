@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { useEffect, useRef } from "react";
 import { CgFileDocument, CgPullClear } from "react-icons/cg";
 
 export default function Canvas(props) {
   const canvasEl = useRef(null);
   var canvas;
+
+  const didMount = useRef(false);
 
   useEffect(() => {
     canvas = new fabric.Canvas(canvasEl.current);
@@ -33,6 +36,10 @@ export default function Canvas(props) {
   }, []);
 
   useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return
+    }
     props.submit();
   }, [props.uimage]);
 
@@ -61,6 +68,7 @@ export default function Canvas(props) {
         stroke: "#FF0000",
       });
     });
+
   }
 
   function handleImport() {
@@ -100,7 +108,7 @@ export default function Canvas(props) {
     );
   }
 
-  function clearAll() {}
+  function clearAll() { }
 
   return <>{props.image ? handleImport() : null}</>;
 }
